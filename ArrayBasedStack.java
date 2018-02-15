@@ -5,30 +5,26 @@ public class ArrayBasedStack<T> implements StackInterface<T>{
    
    private T[] data;
    private int topOfStack = -1;
-   private int INITIAL_CAPACITY = 5;
+   public static final int INITIAL_CAPACITY = 5;
    private boolean stackCreated = true;
    
    @SuppressWarnings("unchecked")
    public ArrayBasedStack(int Initial_Capacity){
-      INITIAL_CAPACITY = Initial_Capacity;
-      if (INITIAL_CAPACITY <= 0) {
+      if (Initial_Capacity <= 0) {
          throw new IllegalArgumentException("Capacity must be greater than 0");
       }
       
-      data = (T[]) new Object[INITIAL_CAPACITY];
+      data = (T[]) new Object[Initial_Capacity];
       topOfStack = -1;
    }
    
    public ArrayBasedStack(){
-   
-      data = (T[])new Object[INITIAL_CAPACITY];
+   this(INITIAL_CAPACITY);
       
    }
    
-   public int[] expandArray() {
-      
-      int[] arr = new int[2*INITIAL_CAPACITY];
-      return arr;
+   public void expandArray() {
+      data = (T[]) Arrays.copyOf(data, data.length * 2);
    }
    
    
@@ -37,8 +33,9 @@ public class ArrayBasedStack<T> implements StackInterface<T>{
       if (topOfStack >= INITIAL_CAPACITY) {
          expandArray();   
       } 
-   
-      data[topOfStack++] = newEntry;
+      topOfStack++;
+      data[topOfStack] = newEntry;
+      
    }
    
    public boolean isEmpty(){
@@ -51,37 +48,43 @@ public class ArrayBasedStack<T> implements StackInterface<T>{
      }  
         
    }
-   //
    
    public T pop() {
    
-   if (topOfStack == -1) {
-      throw new EmptyStackException();
-   }
-   
-   return data[--topOfStack];
-   
+      if (topOfStack == -1) {
+         throw new EmptyStackException();
+      }
+      return data[topOfStack--];
    }
    
    public T peek() {
    
-   if (topOfStack == -1) {
+      if (topOfStack == -1) {
       
-      throw new EmptyStackException();
+         throw new EmptyStackException();
    
-   }
+      }
    
       return data[topOfStack];
    }
    
    public void clear(){
-   
-      Arrays.fill(data, null);
-   
-   
+      while(!isEmpty()) {
+         pop();
+      }
    }
    
+   public static void main(String[] ajsdfhk) {
+      StackInterface<String> s = new ArrayBasedStack<>();
+      s.push("Hello");
+      s.push("World");
+      System.out.println(s.peek());
+      System.out.println(s.pop());
+      System.out.println(s.peek());
+      System.out.println(s.pop());
+      s.push("adsf");
+      System.out.println(s.pop());
+      System.out.println(s.pop());
+   }
    
-
-
 }
